@@ -12,7 +12,9 @@ const moveSpeed = 120
 const jumpForce = 360
 const biJumpForce = 550
 const enemySpeed = 20
+let isJumping = true
 let currentJumpForce = jumpForce
+const fallDeath = 400
 
 //load the root for sprites
 loadRoot('https://i.imgur.com/')
@@ -30,7 +32,7 @@ loadSprite('pipeBottomRight','nqQ79eI.png')
 loadSprite('pipeBottomLeft','c1cYSbt.png')
 
 //add game scene
-scene("game", () => {
+scene("game", ({score}) => {
     //layers background, object and ui
     //object layer is the default
     layers(['bg', 'obj', 'ui'], 'obj')
@@ -73,11 +75,11 @@ scene("game", () => {
     const gameLevel = addLevel(map, levelCfg)
 
     const scoreLabel = add([
-        text('test'),
+        text('score'),
         pos(30, 6),
         layer('ui'),
         {
-            value: 'testscore',
+            value: score,
         }
     ])
 
@@ -154,7 +156,7 @@ scene("game", () => {
         }
     })
 
-    //adding mushroom and coin effect
+    //adding mushroom, coin and enemy effect
     player.collides('mushroom', (m) => {
         destroy(m)
         player.biggify(6)
@@ -167,7 +169,20 @@ scene("game", () => {
     })
 
     player.collides('dangerous', (d) => {
-        go('lose', {score: scoreLabel.value})
+        if(isJumping) {
+            destroy(d)
+        } else {
+            go('lose', {score: scoreLabel.value})
+        }
+    })
+
+    //die by falling in the pit
+    player.action(() => {
+        camPos(player.pos)
+        if (player.pos.y >= fallDeath)
+        {
+            go('lose', {score: scoreLabel.value})
+        }
     })
 
     //attaching moves to keyboard effects even listeners
@@ -181,10 +196,17 @@ scene("game", () => {
         player.move(moveSpeed, 0)
     })
 
+    player.action(() => {
+        if (player.grounded()) {
+            isJumping = false
+        } 
+    })
+
     //jumping we use key press
     keyPress('space', () => {
         //can only jump if grounded
         if(player.grounded()) {
+            isJumping = true
             player.jump(currentJumpForce)
         }
     })
@@ -195,4 +217,5 @@ scene('lose', ({score}) => {
     add([text(score, 32), origin('center'), pos(width()/2, height()/2)])
 })
 
-start("game")
+//pass the score into the game
+start("game", {score: 0})
