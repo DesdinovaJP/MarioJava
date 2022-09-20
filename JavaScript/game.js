@@ -8,6 +8,9 @@ kaboom({
     clearColor: [0, 0, 0, 1],
 })
 
+const moveSpeed = 120
+const jumpForce = 360
+
 //load the root for sprites
 loadRoot('https://i.imgur.com/')
 loadSprite('coin', 'wbKxhcd.png')
@@ -75,8 +78,6 @@ scene("game", () => {
 
     add([text('level' + 'test', pos(4,6))])
 
-    //attaching moves to keyboard effects even listeners
-
     //adding mario
     const player = add([
         sprite('mario'), solid(), 
@@ -86,6 +87,25 @@ scene("game", () => {
         body(),
         origin('bot')
     ])
+
+    //attaching moves to keyboard effects even listeners
+    //use kaboom methods for the event listeners
+    keyDown('left', () => {
+        //(x axis, y axis) use minus bexause we going left
+        player.move(-moveSpeed, 0)
+    })
+
+    keyDown('right', () => {
+        player.move(moveSpeed, 0)
+    })
+
+    //jumping we use key press
+    keyPress('space', () => {
+        //can only jump if grounded
+        if(player.grounded()) {
+            player.jump(jumpForce)
+        }
+    })
 
 })
 
