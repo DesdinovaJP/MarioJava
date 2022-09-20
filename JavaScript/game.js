@@ -40,7 +40,7 @@ scene("game", () => {
        '                                         ',
        '                                         ',
        '                                         ',
-       '   %    $  =*=$=                         ',
+       '   *    $  =*=%=                         ',
        '                                         ',
        '                              []         ',
        '                      ^   ^   ()         ',
@@ -54,14 +54,16 @@ scene("game", () => {
         //use solid to make boundaries around the sprite
         '=': [sprite('block'), solid()],
         '$': [sprite('coin')],
+        //first tag to identify the sprite, the second tag is for action
         '*': [sprite('surpriseBlock'), solid(), 'coin-surprise'],
         '%': [sprite('surpriseBlock'), solid(), 'mushroom-surprise'],
+        '}': [sprite('unboxed'), solid()],
         '[': [sprite('pipeTopLeft'), solid(), scale(0.5)], //used scale to make the sprite smaller
         ']': [sprite('pipeTopRight'), solid(), scale(0.5)],
         '(': [sprite('pipeBottomLeft'), solid(), scale(0.5)],
         ')': [sprite('pipeBottomRight'), solid(), scale(0.5)],
         '^': [sprite('goomba'), solid()],
-        '#': [sprite('mushroom'), solid()]
+        '#': [sprite('mushroom'), solid(), 'mushroom', body()]
     }
 
     //adding the map and the sprites to game level
@@ -119,6 +121,28 @@ scene("game", () => {
         big(),
         origin('bot')
     ])
+
+    //mushroom action
+    action('mushroom', (m) => {
+        m.move(100, 0)
+    })
+
+    //surprise box items
+    player.on("headbump", (obj) => {
+        if (obj.is('coin-surprise')) {
+            //spwan the coin above the object and destroy the block
+            gameLevel.spawn('$', obj.gridPos.sub(0,1))
+            destroy(obj)
+            gameLevel.spawn('}', obj.gridPos.sub(0,0))
+        }
+
+        if (obj.is('mushroom-surprise')) {
+            //spwan the mush above the object and destroy the block
+            gameLevel.spawn('#', obj.gridPos.sub(0,1))
+            destroy(obj)
+            gameLevel.spawn('}', obj.gridPos.sub(0,0))
+        }
+    })
 
     //attaching moves to keyboard effects even listeners
     //use kaboom methods for the event listeners
