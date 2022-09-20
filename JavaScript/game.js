@@ -10,6 +10,8 @@ kaboom({
 
 const moveSpeed = 120
 const jumpForce = 360
+const biJumpForce = 550
+let currentJumpForce = jumpForce
 
 //load the root for sprites
 loadRoot('https://i.imgur.com/')
@@ -53,7 +55,7 @@ scene("game", () => {
         height: 20,
         //use solid to make boundaries around the sprite
         '=': [sprite('block'), solid()],
-        '$': [sprite('coin')],
+        '$': [sprite('coin'), 'coin'],
         //first tag to identify the sprite, the second tag is for action
         '*': [sprite('surpriseBlock'), solid(), 'coin-surprise'],
         '%': [sprite('surpriseBlock'), solid(), 'mushroom-surprise'],
@@ -90,6 +92,7 @@ scene("game", () => {
                 if (isBig){
                     //delta time since last frame kaboom method
                     timer -=dt()
+                    currentJumpForce = biJumpForce
                     if (timer <=0) {
                         this.smallify()
                     }
@@ -100,6 +103,7 @@ scene("game", () => {
             },
             smallify(){
                 this.scale = vec2(1)
+                currentJumpForce = jumpForce
                 timer = 0
                 isBig = false
             },
@@ -124,7 +128,7 @@ scene("game", () => {
 
     //mushroom action
     action('mushroom', (m) => {
-        m.move(100, 0)
+        m.move(80, 0)
     })
 
     //surprise box items
@@ -144,6 +148,18 @@ scene("game", () => {
         }
     })
 
+    //adding mushroom and coin effect
+    player.collides('mushroom', (m) => {
+        destroy(m)
+        player.biggify(6)
+    })
+
+    player.collides('coin', (c) => {
+        destroy(c)
+        scoreLabel.value++
+        scoreLabel.text = scoreLabel.value
+    })
+
     //attaching moves to keyboard effects even listeners
     //use kaboom methods for the event listeners
     keyDown('left', () => {
@@ -159,7 +175,7 @@ scene("game", () => {
     keyPress('space', () => {
         //can only jump if grounded
         if(player.grounded()) {
-            player.jump(jumpForce)
+            player.jump(currentJumpForce)
         }
     })
 
