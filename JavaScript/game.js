@@ -32,7 +32,7 @@ loadSprite('pipeBottomRight','nqQ79eI.png')
 loadSprite('pipeBottomLeft','c1cYSbt.png')
 
 //add game scene
-scene("game", ({score}) => {
+scene("game", ({level, score}) => {
     //layers background, object and ui
     //object layer is the default
     layers(['bg', 'obj', 'ui'], 'obj')
@@ -63,8 +63,8 @@ scene("game", ({score}) => {
         '*': [sprite('surpriseBlock'), solid(), 'coin-surprise'],
         '%': [sprite('surpriseBlock'), solid(), 'mushroom-surprise'],
         '}': [sprite('unboxed'), solid()],
-        '[': [sprite('pipeTopLeft'), solid(), scale(0.5)], //used scale to make the sprite smaller
-        ']': [sprite('pipeTopRight'), solid(), scale(0.5)],
+        '[': [sprite('pipeTopLeft'), solid(), scale(0.5), 'pipe'], //used scale to make the sprite smaller
+        ']': [sprite('pipeTopRight'), solid(), scale(0.5), 'pipe'],
         '(': [sprite('pipeBottomLeft'), solid(), scale(0.5)],
         ')': [sprite('pipeBottomRight'), solid(), scale(0.5)],
         '^': [sprite('goomba'), solid(), 'dangerous'],
@@ -83,7 +83,7 @@ scene("game", ({score}) => {
         }
     ])
 
-    add([text('level' + 'test', pos(4,6))])
+    add([text('level ' + parseInt(level +1)), pos(26,20)])
 
     //adding the mushroom effect
     //this is a component added to mario
@@ -178,11 +178,22 @@ scene("game", ({score}) => {
 
     //die by falling in the pit
     player.action(() => {
+        //cam moves with player
         camPos(player.pos)
         if (player.pos.y >= fallDeath)
         {
             go('lose', {score: scoreLabel.value})
         }
+    })
+
+    //going to the next level
+    player.collides('pipe', () => {
+        keyPress('down', () => {
+            go('game', {
+                level: (level + 1),
+                score: scoreLabel.value
+            })
+        })
     })
 
     //attaching moves to keyboard effects even listeners
@@ -218,4 +229,4 @@ scene('lose', ({score}) => {
 })
 
 //pass the score into the game
-start("game", {score: 0})
+start("game", {level: 0, score: 0})
