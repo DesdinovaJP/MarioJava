@@ -1,4 +1,4 @@
-//initialize kaboom
+//initialize kaboom. It has a library of methods to create a game
 kaboom({
     global: true,
     fullscreen: true,
@@ -26,6 +26,7 @@ loadSprite('pipeBottomLeft','c1cYSbt.png')
 //add game scene
 scene("game", () => {
     //layers background, object and ui
+    //object layer is the default
     layers(['bg', 'obj', 'ui'], 'obj')
 
     //this is the "layout" of the level, each line is a row on the page
@@ -47,6 +48,7 @@ scene("game", () => {
     const levelCfg = {
         width: 20,
         height: 20,
+        //use solid to make boundaries around the sprite
         '=': [sprite('block'), solid()],
         '$': [sprite('coin')],
         '*': [sprite('surpriseBlock'), solid(), 'coin-surprise'],
@@ -56,10 +58,34 @@ scene("game", () => {
         '(': [sprite('pipeBottomLeft'), solid(), scale(0.5)],
         ')': [sprite('pipeBottomRight'), solid(), scale(0.5)],
         '^': [sprite('goomba'), solid()],
+        '#': [sprite('mushroom'), solid()]
     }
 
     //adding the map and the sprites to game level
     const gameLevel = addLevel(map, levelCfg)
+
+    const scoreLabel = add([
+        text('test'),
+        pos(30, 6),
+        layer('ui'),
+        {
+            value: 'testscore',
+        }
+    ])
+
+    add([text('level' + 'test', pos(4,6))])
+
+    //attaching moves to keyboard effects even listeners
+
+    //adding mario
+    const player = add([
+        sprite('mario'), solid(), 
+        //starting position
+        pos(30, 0),
+        //gravity effect
+        body(),
+        origin('bot')
+    ])
 
 })
 
