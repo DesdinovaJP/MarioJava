@@ -1,3 +1,4 @@
+//https://www.youtube.com/watch?v=2nucjefSr6I&t=169s
 //initialize kaboom. It has a library of methods to create a game
 kaboom({
     global: true,
