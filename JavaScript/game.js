@@ -39,17 +39,32 @@ scene("game", ({level, score}) => {
 
     //this is the "layout" of the level, each line is a row on the page
     //the '=' is a block for example at the bottom of the map
-    const map = [
-       '                                         ',
-       '                                         ',
-       '                                         ',
-       '                                         ',
-       '                                         ',
-       '   *    $  =*=%=                         ',
-       '                                         ',
-       '                              []         ',
-       '                      ^   ^   ()         ',
-       '================================    =====',
+    const maps = [
+        [
+            '                                         ',
+            '                                         ',
+            '                                         ',
+            '                                         ',
+            '                                         ',
+            '   *    $  =*=%=                         ',
+            '                                         ',
+            '                              []         ',
+            '                      ^   ^   ()         ',
+            '================================    =====',
+        ],
+
+        [
+            '                                         ',
+            '                                         ',
+            '                                         ',
+            '                                         ',
+            '                                         ',
+            '   *    $  =*=%=                         ',
+            '                                         ',
+            '                              []         ',
+            '                      ^   ^   ()         ',
+            '================================    =====',
+        ]
     ]
 
     //assigning sprite for the characteres on the map
@@ -72,7 +87,7 @@ scene("game", ({level, score}) => {
     }
 
     //adding the map and the sprites to game level
-    const gameLevel = addLevel(map, levelCfg)
+    const gameLevel = addLevel(maps[level], levelCfg)
 
     const scoreLabel = add([
         text('score'),
