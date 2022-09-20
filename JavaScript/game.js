@@ -3,7 +3,7 @@ kaboom({
     global: true,
     fullscreen: true,
     //makes the game smaller or bigger
-    scale: 2,
+    scale: 1.5,
     debug: true,
     clearColor: [0, 0, 0, 1],
 })
@@ -36,10 +36,10 @@ scene("game", () => {
        '                                         ',
        '                                         ',
        '                                         ',
+       '   %    $  =*=$=                         ',
        '                                         ',
-       '                                         ',
-       '                                         ',
-       '                                         ',
+       '                              []         ',
+       '                      ^   ^   ()         ',
        '================================    =====',
     ]
 
@@ -47,7 +47,15 @@ scene("game", () => {
     const levelCfg = {
         width: 20,
         height: 20,
-        '=': [sprite('block', solid())]
+        '=': [sprite('block'), solid()],
+        '$': [sprite('coin')],
+        '*': [sprite('surpriseBlock'), solid(), 'coin-surprise'],
+        '%': [sprite('surpriseBlock'), solid(), 'mushroom-surprise'],
+        '[': [sprite('pipeTopLeft'), solid(), scale(0.5)], //used scale to make the sprite smaller
+        ']': [sprite('pipeTopRight'), solid(), scale(0.5)],
+        '(': [sprite('pipeBottomLeft'), solid(), scale(0.5)],
+        ')': [sprite('pipeBottomRight'), solid(), scale(0.5)],
+        '^': [sprite('goomba'), solid()],
     }
 
     //adding the map and the sprites to game level
