@@ -11,6 +11,7 @@ kaboom({
 const moveSpeed = 120
 const jumpForce = 360
 const biJumpForce = 550
+const enemySpeed = 20
 let currentJumpForce = jumpForce
 
 //load the root for sprites
@@ -64,7 +65,7 @@ scene("game", () => {
         ']': [sprite('pipeTopRight'), solid(), scale(0.5)],
         '(': [sprite('pipeBottomLeft'), solid(), scale(0.5)],
         ')': [sprite('pipeBottomRight'), solid(), scale(0.5)],
-        '^': [sprite('goomba'), solid()],
+        '^': [sprite('goomba'), solid(), 'dangerous'],
         '#': [sprite('mushroom'), solid(), 'mushroom', body()]
     }
 
@@ -131,6 +132,11 @@ scene("game", () => {
         m.move(80, 0)
     })
 
+    //goombas action
+    action('dangerous', (d) => {
+        d.move(-enemySpeed, 0)
+    })
+
     //surprise box items
     player.on("headbump", (obj) => {
         if (obj.is('coin-surprise')) {
@@ -160,6 +166,10 @@ scene("game", () => {
         scoreLabel.text = scoreLabel.value
     })
 
+    player.collides('dangerous', (d) => {
+        go('lose', {score: scoreLabel.value})
+    })
+
     //attaching moves to keyboard effects even listeners
     //use kaboom methods for the event listeners
     keyDown('left', () => {
@@ -179,6 +189,10 @@ scene("game", () => {
         }
     })
 
+})
+
+scene('lose', ({score}) => {
+    add([text(score, 32), origin('center'), pos(width()/2, height()/2)])
 })
 
 start("game")
