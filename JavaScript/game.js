@@ -31,6 +31,12 @@ loadSprite('pipeTopRight','hj2GK4n.png')
 loadSprite('pipeBottomRight','nqQ79eI.png')
 loadSprite('pipeBottomLeft','c1cYSbt.png')
 
+loadSprite('blueBlock', 'fVscIbn.png')
+loadSprite('blueBrick', '3e5YRQd.png')
+loadSprite('blueSteel', 'gqVoI2b.png')
+loadSprite('blueGoomba', 'SvV4ueD.png')
+loadSprite('blueSurpriseBlock', 'RMqCc1G.png')
+
 //add game scene
 scene("game", ({level, score}) => {
     //layers background, object and ui
@@ -54,16 +60,16 @@ scene("game", ({level, score}) => {
         ],
 
         [
-            '                                         ',
-            '                                         ',
-            '                                         ',
-            '                                         ',
-            '                                         ',
-            '   *    $  =*=%=                         ',
-            '                                         ',
-            '                              []         ',
-            '                      ^   ^   ()         ',
-            '================================    =====',
+            '£                                         ',
+            '£                                         ',
+            '£                                         ',
+            '£                                         ',
+            '£                                         ',
+            '£   $    %                                ',
+            '£             ££                          ',
+            '£                                  z   [] ',
+            '£     &  &        z        &      zz   () ',
+            '!!!!!!!!!!!!!!!!!!!    !!!!!    !!!!  !!!!',
         ]
     ]
 
@@ -82,8 +88,13 @@ scene("game", ({level, score}) => {
         ']': [sprite('pipeTopRight'), solid(), scale(0.5), 'pipe'],
         '(': [sprite('pipeBottomLeft'), solid(), scale(0.5)],
         ')': [sprite('pipeBottomRight'), solid(), scale(0.5)],
-        '^': [sprite('goomba'), solid(), 'dangerous'],
-        '#': [sprite('mushroom'), solid(), 'mushroom', body()]
+        '^': [sprite('goomba'), solid(), 'dangerous', body()],
+        '#': [sprite('mushroom'), solid(), 'mushroom', body()],
+        '£': [sprite('blueBlock'), solid(), scale(0.5)],
+        '!': [sprite('blueBrick'), solid(), scale(0.5)],
+        'z': [sprite('blueSteel'), solid(), scale(0.5)],
+        '&': [sprite('blueGoomba'), solid(), scale(0.5), 'dangerous', body()],
+        '-': [sprite('blueSurpriseBlock'), solid(), scale(0.5), 'coin-surprise'],
     }
 
     //adding the map and the sprites to game level
