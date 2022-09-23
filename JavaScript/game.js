@@ -246,7 +246,7 @@ scene("game", ({level, score}) => {
         if(player.grounded()) {
             isJumping = true
             player.jump(currentJumpForce)
-        }
+       }
     })
 
 })
